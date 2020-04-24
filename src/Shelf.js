@@ -7,13 +7,13 @@ class Shelf extends React.Component {
   
   static propTypes = {
     books: PropTypes.array.isRequired,
-    title: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired
+    title: PropTypes.string.isRequired
   }
 
-
+  
+  
   render() {
-  const { books } = this.props
+  const { books, onUpdateBook} = this.props
 
 
     return(
@@ -21,17 +21,15 @@ class Shelf extends React.Component {
           <h2 className="bookshelf-title">{this.props.title}</h2>
           <div className="bookshelf-books">
             <ol className="books-grid">
-              
-
-              { books.filter((book) => book.shelf === this.props.name).map((filteredBook) => ( 
+              {books.map((book) => (
                   <li>
                     <Book
-                      book={filteredBook}
+                      book={book}
+                      onUpdateBook={onUpdateBook}
                     />                      
                   </li>
                 )
               )}
-              
             </ol>
           </div>
         </div>

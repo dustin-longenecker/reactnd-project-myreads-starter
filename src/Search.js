@@ -2,13 +2,23 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import Book from './Book'
+import Shelf from './Shelf'
+import * as BooksAPI from './BooksAPI'
 
 class Search extends React.Component {
-  static propTypes = {
-    books: PropTypes.array.isRequired,
-  }
+  
   state = {
-    query: ''  
+    query: '',
+    books: []
+  }
+
+  componentDidMount() {
+    BooksAPI.getAll()
+      .then( books => {
+        console.log("books from BookApi", books)
+        this.setState({books:books})
+      }); 
+    console.log("Books", this.state.books); 
   }
   updateQuery = (query) => {
     this.setState(() => ({
@@ -19,8 +29,7 @@ class Search extends React.Component {
     this.updateQuery('')
   }
   render() {
-    const { query } = this.state
-    const { books } = this.props
+    const { query, books } = this.state
     const showingBooks = query === ''
     ? books
     : books.filter((c) => (
@@ -62,6 +71,7 @@ class Search extends React.Component {
                   <Book/>
                 </li>
             ))}
+            <Shelf books={showingBooks.filter((book) => book.shelf === query.query)} title='Search'/>
           </ol>
         </div>
       </div>
