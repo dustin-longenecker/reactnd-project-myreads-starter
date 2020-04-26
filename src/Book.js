@@ -21,7 +21,11 @@ class Book extends React.Component {
           <ShelfChanger book={book} onUpdateBook={onUpdateBook} />
         </div>
         <div className="book-title">{book.title}</div>
-        <div className="book-authors">{book.authors}</div>
+        <div className="book-authors">{book.authors ? book.authors.map((author) => (
+          <li>{author}</li>
+        ))
+        : "No Authors"
+      }</div>
       </div>
       
       )
