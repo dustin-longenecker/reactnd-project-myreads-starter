@@ -12,7 +12,6 @@ class Book extends React.Component {
 
 
     const { book, onUpdateBook } = this.props
-    const values = ['move', 'currentlyReading', 'wantToRead', 'read', 'none']
     console.log(book)
     return(
        <div className="book">
