@@ -12,18 +12,47 @@ class Search extends React.Component {
     books: []
   }
 
-  componentDidMount() {
-    BooksAPI.getAll()
-      .then( books => {
-        console.log("books from BookApi", books)
-        this.setState({books:books})
-      }); 
-    console.log("Books", this.state.books); 
-  }
+  
+  onUpdateBook = (book, shelf) => {
+        BooksAPI.update(book, shelf);
+        this.setState((currentState) => ({
+            books: currentState.books.map((b) => {
+                if (b.id === book.id) {
+                    b.shelf = shelf;
+                }
+                return b
+            })
+        }))
+    }
   updateQuery = (query) => {
     this.setState(() => ({
-      query: query.trim()
+      query: query
     }))
+    if(query !== '') {
+      BooksAPI.search(query).then((books) => {
+        if (!books.error) {
+          BooksAPI.getAll().then((bookShelf) => {
+              books.map((book) => {
+                  bookShelf.map((shelvedBook) => {
+                      if (book.id === shelvedBook.id) {
+                          book.shelf = shelvedBook.shelf
+                      }
+                      return shelvedBook;
+                  })
+                  return book;
+              })
+              this.setState(() => ({
+                  books: books
+              }))
+          })
+        }
+      })
+    }
+    else {
+            this.setState(() => ({
+                books: []   
+            }))
+        }
   }
   clearQuery = () => {
     this.updateQuery('')
@@ -58,20 +87,14 @@ class Search extends React.Component {
 
           </div>
         </div>
-        {showingBooks.length !== books.length && (
         <div className='showing-contacts'>
-          <span>Now showing {showingBooks.length} of {books.length}</span>
+          <span>Now showing {books.length} of {books.length}</span>
           <button onClick={this.clearQuery}>Show All</button>
         </div>
-        )}
         <div className="search-books-results">
           <ol className="books-grid">
-            {showingBooks.map((book) => (
-                <li key={book.title} className='book-list-item'>
-                  <Book/>
-                </li>
-            ))}
-            <Shelf books={showingBooks.filter((book) => book.shelf === query.query)} title='Search'/>
+            
+            <Shelf books={books.filter((book) => book.shelf === query.query)} title='Search' name='search' onUpdateBook={this.onUpdateBook}/>
           </ol>
         </div>
       </div>

@@ -51,30 +51,21 @@ class BookShelf extends React.Component {
             <Shelf
               books={books.filter((book) => book.shelf === 'currentlyReading')}
               title='Currently Reading'
-              name='currentlyReading'
               onUpdateBook={this.onUpdateBook}
             />
             <Shelf
               books={books.filter((book) => book.shelf === 'wantToRead')}
               title='Want To Read'
-              name='wantToRead'
               onUpdateBook={this.onUpdateBook}
 
             />
             <Shelf
               books={books.filter((book) => book.shelf === 'read')}
               title='Read'
-              name='read'
               onUpdateBook={this.onUpdateBook}
 
             />  
-            <Shelf
-              books={books.filter((book) => book.shelf === 'none')}
-              title='None'
-              name='none'
-              onUpdateBook={this.onUpdateBook}
-
-            />     
+               
           </div>
 
         </div>
