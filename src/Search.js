@@ -1,7 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
-import Book from './Book'
 import Shelf from './Shelf'
 import * as BooksAPI from './BooksAPI'
 
@@ -59,11 +57,7 @@ class Search extends React.Component {
   }
   render() {
     const { query, books } = this.state
-    const showingBooks = query === ''
-    ? books
-    : books.filter((c) => (
-      c.title.toLowerCase().includes(query.toLowerCase())
-    ))
+    
     return(
        <div className="search-books">
         <div className="search-books-bar">
@@ -87,10 +81,7 @@ class Search extends React.Component {
 
           </div>
         </div>
-        <div className='showing-contacts'>
-          <span>Now showing {books.length} of {books.length}</span>
-          <button onClick={this.clearQuery}>Show All</button>
-        </div>
+        
         <div className="search-books-results">
           <ol className="books-grid">
             

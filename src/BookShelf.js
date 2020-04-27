@@ -14,6 +14,7 @@ class BookShelf extends React.Component {
      * pages, as well as provide a good URL they can bookmark and share.
      */
     books: [],
+    rating: ''
     
  }
 
@@ -21,7 +22,10 @@ class BookShelf extends React.Component {
     BooksAPI.getAll()
       .then( books => {
         console.log("books from BookApi", books)
-        this.setState({books:books})
+        this.setState({
+          books:books,
+          rating: 'none'
+        })
       }); 
     console.log("Books", this.state.books); 
   }
@@ -36,6 +40,17 @@ class BookShelf extends React.Component {
             })
         }))
     }
+  onUpdateBookRating = (book, rating) => {
+      BooksAPI.update(book, rating)
+        this.setState((currentState) => ({
+            books: currentState.books.map((b) => {
+                if (b.id === book.id) {
+                    b.rating = rating;
+                }
+                return b
+            })
+        }))
+  }
 
   render() {
     const { books } = this.state
@@ -52,6 +67,7 @@ class BookShelf extends React.Component {
               books={books.filter((book) => book.shelf === 'currentlyReading')}
               title='Currently Reading'
               onUpdateBook={this.onUpdateBook}
+              onUpdateBookRating={this.onUpdateBookRating}
             />
             <Shelf
               books={books.filter((book) => book.shelf === 'wantToRead')}

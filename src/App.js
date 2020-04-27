@@ -1,10 +1,11 @@
 import React from 'react'
-import { Route, Link } from 'react-router-dom'
+import { Route } from 'react-router-dom'
 
-import * as BooksAPI from './BooksAPI'
 import './App.css'
 import BookShelf from './BookShelf'
 import Search from './Search'
+import BookDetail from './BookDetail'
+
 
 
 class BooksApp extends React.Component {
@@ -16,6 +17,8 @@ class BooksApp extends React.Component {
       <div className="app">
         <Route exact path='/search' component={Search} />
         <Route exact path ='/' component={BookShelf}/>
+        <Route exact path ='/book/:id' component={BookDetail} />
+
       </div>
     )
   }
