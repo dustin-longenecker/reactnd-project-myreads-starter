@@ -11,7 +11,7 @@ class Shelf extends React.Component {
   
   
   render() {
-  const { books, onUpdateBook, onUpdateBookRating} = this.props
+  const { books, onUpdateBook} = this.props
 
 
     return(
@@ -24,7 +24,6 @@ class Shelf extends React.Component {
                     <Book
                       book={book}
                       onUpdateBook={onUpdateBook}
-                      onUpdateBookRating={onUpdateBookRating}
 
                     />                      
                   </li>
