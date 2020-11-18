@@ -17,9 +17,8 @@ updateQuery = (query) => {
     if(query !== '') {
       BooksAPI.search(query).then((books) => {
         if (!books.error) {
-          BooksAPI.getAll().then((bookShelf) => {
              books = books.map((book) => {
-              const bookOnShelf = bookShelf.find(({ id }) => book.id === id);
+              const bookOnShelf = this.props.books.find(({ id }) => book.id === id);
               return {
                 ...book,
                 shelf: bookOnShelf?.shelf ?? 'none',
@@ -29,7 +28,6 @@ updateQuery = (query) => {
               this.setState(() => ({
                   books: books
               }))
-          })
         }
       })
     }
@@ -44,7 +42,7 @@ updateQuery = (query) => {
   }
   
   render() {
-    const { query, books} = this.state
+    const { query, books } = this.state
     const { onUpdateBook } = this.props
     return(
        <div className="search-books">

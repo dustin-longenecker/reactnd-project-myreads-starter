@@ -25,8 +25,6 @@ class BookDetail extends React.Component {
       
   }
 
-  
-  
 
   render() {
     const { book } = this.state
