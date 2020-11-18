@@ -1,9 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-
-import Shelf from './Shelf'
-import Search from './Search'
 import * as BooksAPI from './BooksAPI'
+import Shelf from './Shelf'
 
 
 class BookShelf extends React.Component {
@@ -17,15 +15,15 @@ class BookShelf extends React.Component {
     books: []
     
  }
-
-  componentDidMount() {
+componentDidMount() {
     BooksAPI.getAll()
       .then( books => {
         console.log("books from BookApi", books)
         this.setState({
-          books:books
+          books
         })
       }); 
+
     console.log("Books", this.state.books); 
   }
    onUpdateBook = (book, shelf) => {
@@ -40,16 +38,12 @@ class BookShelf extends React.Component {
         }))
     }
 
-
   render() {
-    const { books } = this.state
+    const {books} = this.state
 
     return (
-     
       <div className="list-books">
-        <div>
-          <Search onUpdateBook={this.onUpdateBook}/>
-        </div>
+        
         <div className="list-books-title">
           <h1>MyReads</h1>
         </div>

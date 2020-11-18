@@ -6,14 +6,10 @@ import * as BooksAPI from './BooksAPI'
 class Search extends React.Component {
   
   state = {
-    query: '',
-    books: []
+    query: ''
   }
- 
-
   
-
-  updateQuery = (query) => {
+updateQuery = (query) => {
     this.setState(() => ({
       query: query
     }))
@@ -22,7 +18,12 @@ class Search extends React.Component {
         if (!books.error) {
           BooksAPI.getAll().then((bookShelf) => {
               books.map((book) => {
-                  
+                  bookShelf.map((shelvedBook) => {
+                      if (book.id === shelvedBook.id) {
+                          book.shelf = shelvedBook.shelf
+                      }
+                      return shelvedBook;
+                  })
                   return book;
               })
               this.setState(() => ({
@@ -41,9 +42,20 @@ class Search extends React.Component {
   clearQuery = () => {
     this.updateQuery('')
   }
+  onUpdateBook = (book, shelf) => {
+        BooksAPI.update(book, shelf);
+        this.setState((currentState) => ({
+            books: currentState.books.map((b) => {
+                if (b.id === book.id) {
+                    b.shelf = shelf;
+                }
+                return b
+            })
+        }))
+    }
   render() {
-    const { query, books } = this.state
-    const { onUpdateBook } = this.props
+    const { query } = this.state
+    const { books } = this.props
     return(
        <div className="search-books">
         <div className="search-books-bar">
@@ -71,7 +83,9 @@ class Search extends React.Component {
         <div className="search-books-results">
           <ol className="books-grid">
             
-            <Shelf books={books.filter((book) => book.shelf === query.query)} title='Search' name='search' onUpdateBook={onUpdateBook}/>
+            
+            <Shelf books={this.state.books ? this.state.books : this.state.books = []} title='Search' name='search' onUpdateBook={this.onUpdateBook}/>
+
           </ol>
         </div>
       </div>
