@@ -50,12 +50,12 @@ componentDidMount() {
       <div className="app">
       <BrowserRouter>
       
-         <Route path='/' exact component= { () =>
+         <Route exact path='/'>
             <BookShelf books = {books} onUpdateBook={this.onUpdateBook} />
-          }/>
-          <Route path='/search' exact component= { () =>
+          </Route>
+          <Route exact path='/search'>
             <Search books = {books} onUpdateBook={this.onUpdateBook} />
-          }/>
+          </Route>
         <Route exact path ='/book/:id' component={BookDetail} />
       </BrowserRouter>
 
