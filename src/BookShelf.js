@@ -1,75 +1,49 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import * as BooksAPI from './BooksAPI'
 import Shelf from './Shelf'
+import PropTypes from 'prop-types'
 
-
-class BookShelf extends React.Component {
-  state = {
-    /**
-     * TODO: Instead of using this state variable to keep track of which page
-     * we're on, use the URL in the browser's address bar. This will ensure that
-     * users can use the browser's back and forward buttons to navigate between
-     * pages, as well as provide a good URL they can bookmark and share.
-     */
-    books: []
+const SHELVES = [
+      {
+        title: 'Currently Reading',
+        id: 'currentlyReading'
+      },
+      {
+        title: 'Want To Read',
+        id: 'wantToRead'
+      },
+      {
+        title: 'Read',
+        id: 'read'
+      }
+    ];
+const BookShelf = ({ books, onUpdateBook }) => (
+  
     
- }
-componentDidMount() {
-    BooksAPI.getAll()
-      .then( books => {
-        console.log("books from BookApi", books)
-        this.setState({
-          books
-        })
-      }); 
-
-    console.log("Books", this.state.books); 
-  }
-   onUpdateBook = (book, shelf) => {
-        BooksAPI.update(book, shelf);
-        this.setState((currentState) => ({
-            books: currentState.books.map((b) => {
-                if (b.id === book.id) {
-                    b.shelf = shelf;
-                }
-                return b
-            })
-        }))
-    }
-
-  render() {
-    const {books} = this.state
-
-    return (
       <div className="list-books">
         
         <div className="list-books-title">
           <h1>MyReads</h1>
         </div>
         <div className="list-books-content">
-            <Shelf
-              books={books.filter((book) => book.shelf === 'currentlyReading')}
-              title='Currently Reading'
-              onUpdateBook={this.onUpdateBook}
-            />
-            <Shelf
-              books={books.filter((book) => book.shelf === 'wantToRead')}
-              title='Want To Read'
-              onUpdateBook={this.onUpdateBook}
-            />
-            <Shelf
-              books={books.filter((book) => book.shelf === 'read')}
-              title='Read'
-              onUpdateBook={this.onUpdateBook}
-            />  
+            {SHELVES.map(shelf => (
+              <Shelf
+                key={shelf.id}
+                books={books.filter((book) => book.shelf === shelf.id)}
+                title= {shelf.title}
+                onUpdateBook={onUpdateBook}
+              />
+              ))}
         </div>
         <div className="open-search">
           <Link to='/search' className='search-book'><button>Add a Book</button></Link>
         </div>
       </div>
-    )
-  }
-}
+)
+BookShelf.propTypes = {
+    books: PropTypes.array.isRequired,
+    onUpdateBook: PropTypes.func.isRequired
+
+};
 
 export default BookShelf

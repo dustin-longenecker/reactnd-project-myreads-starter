@@ -6,7 +6,8 @@ import * as BooksAPI from './BooksAPI'
 class Search extends React.Component {
   
   state = {
-    query: ''
+    query: '',
+    books: []
   }
   
 updateQuery = (query) => {
@@ -17,15 +18,14 @@ updateQuery = (query) => {
       BooksAPI.search(query).then((books) => {
         if (!books.error) {
           BooksAPI.getAll().then((bookShelf) => {
-              books.map((book) => {
-                  bookShelf.map((shelvedBook) => {
-                      if (book.id === shelvedBook.id) {
-                          book.shelf = shelvedBook.shelf
-                      }
-                      return shelvedBook;
-                  })
-                  return book;
-              })
+             books = books.map((book) => {
+              const bookOnShelf = bookShelf.find(({ id }) => book.id === id);
+              return {
+                ...book,
+                shelf: bookOnShelf?.shelf ?? 'none',
+              }
+
+             })
               this.setState(() => ({
                   books: books
               }))
@@ -42,24 +42,14 @@ updateQuery = (query) => {
   clearQuery = () => {
     this.updateQuery('')
   }
-  onUpdateBook = (book, shelf) => {
-        BooksAPI.update(book, shelf);
-        this.setState((currentState) => ({
-            books: currentState.books.map((b) => {
-                if (b.id === book.id) {
-                    b.shelf = shelf;
-                }
-                return b
-            })
-        }))
-    }
+  
   render() {
-    const { query } = this.state
-    const { books } = this.props
+    const { query, books} = this.state
+    const { onUpdateBook } = this.props
     return(
        <div className="search-books">
         <div className="search-books-bar">
-          <Link to='/'><button className="close-search" >Close</button></Link>
+          <Link to='/' className="close-search">Close</Link>
           <div className="search-books-input-wrapper">
             {/*
               NOTES: The search from BooksAPI is limited to a particular set of search terms.
@@ -84,7 +74,7 @@ updateQuery = (query) => {
           <ol className="books-grid">
             
             
-            <Shelf books={this.state.books ? this.state.books : this.state.books = []} title='Search' name='search' onUpdateBook={this.onUpdateBook}/>
+            <Shelf books={books} title='Search' name='search' onUpdateBook={onUpdateBook}/>
 
           </ol>
         </div>
